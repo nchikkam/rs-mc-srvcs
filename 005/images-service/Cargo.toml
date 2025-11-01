@@ -1,0 +1,14 @@
+[package]
+name = "images-service"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+tokio = { version = "1.28", features = ["full"] }
+hyper = { version = "0.14", features = ["full"] }
+futures = "0.3"
+lazy_static = "1.4"
+regex = "1.11"
+rand = "0.8"
+tokio-util = "0.7"
+anyhow = "1.0"
