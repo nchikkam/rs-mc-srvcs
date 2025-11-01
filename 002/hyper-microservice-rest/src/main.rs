@@ -98,7 +98,7 @@ fn response_with_code(status_code: StatusCode) -> Response<Body> {
 
 fn main() {
     let port = 8000;
-    
+
     let addr = ([127, 0, 0, 1], port).into();
     let builder = Server::bind(&addr);
     let user_db = Arc::new(Mutex::new(Slab::new()));
