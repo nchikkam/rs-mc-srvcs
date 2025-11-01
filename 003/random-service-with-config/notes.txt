@@ -30,3 +30,29 @@ with
 the with_name method. A subcommand instance also has methods to 
 set meta information about a subcommand, like we did with the App 
 instance. Subcommands can also take arguments.
+
+
+Debugging in the middle of chaining calls. Since in Rust, these
+are expressions, we can use dbg! default macro:
+
+eg:
+
+let config = File::open("microservice.toml")
+    .and_then(|mut file| {
+        let mut buffer = String::new();
+        file.read_to_string(&mut buffer)?;
+        Ok(buffer)
+    })
+    .map(|buffer| {
+        dbg!(&buffer); // <-- debug the buffer here
+        buffer
+    })
+    .and_then(|buffer| {
+        toml::from_str::<Config>(&buffer)
+            .map_err(|err| io::Error::new(io::ErrorKind::Other, err))
+    })
+    .map_err(|err| {
+        warn!("Can't read config file: {}", err);
+    })
+    .ok();
+    
