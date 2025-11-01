@@ -1,0 +1,32 @@
+How to add subcommands
+Some popular applications, such as cargo and docker, use 
+subcommands to provide multiple commands inside a single 
+binary. We can also support subcommands with
+the clap crate. A microservice might have two commands: one 
+to run the server and one to generate a secret for the HTTP 
+cookies. Take a look at the following code:
+
+   let matches = App::new("Server with keys")
+       .setting(AppSettings::SubcommandRequiredElseHelp)
+       .subcommand(SubCommand::with_name("run")
+           .about("run the server")
+           .arg(Arg::with_name("address")
+               .short("a")
+               .long("address")
+               .takes_value(true)
+               .help("address of the server"))
+        .subcommand(SubCommand::with_name("key")
+           .about("generates a secret key for cookies")))
+       .get_matches();
+
+Here, we have used two methods. The setting method tweaks 
+the builder and you can set it with variants of the AppSettings 
+enumeration.
+The SubcommandRequiredElseHelp method requires us to use 
+subcommands or prints help message if no subcommands are provided. 
+To add a subcommand, we use
+the subcommand method with the SubCommand instance that we created 
+with
+the with_name method. A subcommand instance also has methods to 
+set meta information about a subcommand, like we did with the App 
+instance. Subcommands can also take arguments.
